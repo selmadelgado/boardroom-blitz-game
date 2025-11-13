@@ -175,7 +175,7 @@
 <canvas id="confetti" style="position:fixed;top:0;left:0;pointer-events:none;z-index:999;"></canvas>
 <audio id="winnerMusic" src="winner-music.mp3" preload="auto"></audio>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script type="module">
 // ==================== YOUR REAL FIREBASE CONFIG ====================
 const firebaseConfig = {
@@ -241,7 +241,6 @@ async function saveScore(name, time) {
     await addDoc(collection(db, 'scores'), { name, time, date: new Date() });
   } catch (e) {
     console.error('Firebase save failed:', e);
-    // Fallback to local
     let scores = JSON.parse(localStorage.getItem('memoryLeaderboard') || '[]');
     scores.push({ name, time });
     scores.sort((a, b) => a.time - b.time);
@@ -406,7 +405,6 @@ function startTimer() {
   }, 500);
 }
 </script>
-
  
 // ==================== DATA ====================
 const CSV_DATA = `Name,Company
@@ -611,4 +609,5 @@ function shuffle(a) {
 </body>
 
 </html>
+
 
