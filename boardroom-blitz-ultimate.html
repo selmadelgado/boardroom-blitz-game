@@ -138,12 +138,12 @@ Ashley Zickefoose,Dave & Busters`;
 
     function safeName(name) { return name.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, '_'); }
 
-    CSV_DATA.trim().split('\n').slice(1).forEach((line, i) => {
-      const [name, company] = line.split(',').map(s => s.trim());
-      const img = safeName(name) + IMG_EXT;
-      cards.push({id: i, type: 'photo', img, name, company});
-      cards.push({id: i, type: 'text', img, name, company});
-    });
+   CSV_DATA.trim().split('\n').slice(1).forEach((line, i) => {
+  const [name, company] = line.split(',').map(s => s.trim());
+  const img = 'images/' + safeName(name) + '.png';  // FIXED PATH
+  cards.push({id: i, type: 'photo', img, name, company});
+  cards.push({id: i, type: 'text', img, name, company});
+});
 
     function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } }
     shuffle(cards);
@@ -240,3 +240,4 @@ Ashley Zickefoose,Dave & Busters`;
   </script>
 </body>
 </html>
+
