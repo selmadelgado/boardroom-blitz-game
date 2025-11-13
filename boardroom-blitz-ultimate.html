@@ -1,201 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Boardroom Blitz: Ultimate Memory Match</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>memory card</text></svg>">
-<style>
-  * { box-sizing: border-box; margin:0; padding:0; }
-  body {font-family: 'Segoe UI', Arial, sans-serif; background:#f0f4f8; text-align:center; padding:20px;}
-  h1 {color:#1a5276; margin-bottom:5px;}
-  #timer {font-weight:bold; color:#2980b9; margin-bottom:15px;}
- 
-  #game {
-    display:flex;
-    flex-wrap:wrap;
-    gap:14px;
-    justify-content:center;
-    max-width:1000px;
-    margin:0 auto;
-    padding:10px;
-  }
- 
-  .card {
-    flex: 0 0 calc(16.666% - 14px);
-    aspect-ratio:1;
-    position:relative;
-    border-radius:16px;
-    box-shadow:0 6px 16px rgba(0,0,0,0.15);
-    overflow:hidden;
-    cursor:pointer;
-    transition: all 0.4s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .card.visible { background:white; }
-  .card.hidden { background:#2c3e50; transform:scale(0.95); }
-  .card.matched { opacity:0; transform:scale(0.8); transition: all 0.6s ease; }
-
-  .card img { width:100%; height:100%; object-fit:cover; display:block; }
-
-  .card .text {
-    padding: 16px;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-  }
-  .card .text strong {
-    font-size: 1.4em;
-    font-weight: 800;
-    color: #1a5276;
-    line-height: 1.1;
-  }
-  .card .text span {
-    font-size: 0.85em;
-    color: #34495e;
-    font-weight: 500;
-  }
-
-  /* RETRO WIN SCREEN */
-  #win {
-    display:none; 
-    position:fixed; inset:0; 
-    background: url('retro-bknd.png') center center / cover no-repeat;
-    color:white; 
-    flex-direction:column; 
-    align-items:center; 
-    justify-content:center; 
-    font-size:2.2em;
-    padding:20px;
-    text-shadow: 3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
-  }
-  #win h2 {
-    font-size: 3.5em;
-    margin-bottom: 10px;
-    animation: glow 2s ease-in-out infinite alternate;
-    font-family: 'Courier New', monospace;
-  }
-  #win p {font-size:1.2em; margin:12px 0;}
-  #win input {
-    margin:20px 0; padding:14px; font-size:1.2em; width:280px; border-radius:8px; border:none; box-shadow:0 4px 12px rgba(0,0,0,0.5);
-  }
-  #win button {
-    margin:12px 10px 0; padding:16px 36px; font-size:1.2em; background:#ff6b6b; color:white;
-    border:none; border-radius:12px; cursor:pointer; box-shadow:0 6px 0 #c44545;
-    transition: all 0.1s;
-  }
-  #win button:hover {background:#ff8787; transform:translateY(2px);}
-  #win button:active {transform:translateY(6px); box-shadow:0 2px 0 #c44545;}
-
-  /* LEADERBOARD — CLEAN 10pt FONT */
-  #leaderboard {
-    margin-top:30px; 
-    font-size:10pt;  /* EXACTLY 10pt */
-    color:#fff; 
-    max-width:380px;
-    background:rgba(0,0,0,0.6); 
-    padding:20px; 
-    border-radius:16px;
-    backdrop-filter: blur(8px);
-  }
-  #leaderboard strong {
-    color:#ffd700; 
-    display:block; 
-    margin-bottom:12px; 
-    font-size:14pt;
-    text-shadow: 2px 2px 0 #000;
-  }
-  #leaderboardList {
-    counter-reset: rank;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  #leaderboardList li {
-    counter-increment: rank;
-    margin: 8px 0;
-    padding-left: 36px;
-    position: relative;
-    font-size:10pt;
-    text-shadow: 1px 1px 0 #000;
-  }
-  #leaderboardList li::before {
-    content: counter(rank) ".";
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-    color: #ffd700;
-    font-size:11pt;
-  }
-
-  .missing {
-    background:#ffebee; color:#c62828; font-size:0.8em; padding:10px; text-align:center;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  @keyframes glow {
-    from { text-shadow: 0 0 20px #fff, 0 0 30px #ff00ff, 0 0 40px #00ffff; }
-    to { text-shadow: 0 0 30px #fff, 0 0 40px #ff00ff, 0 0 50px #00ffff; }
-  }
-
-  @media (max-width: 900px) {
-    .card { flex: 0 0 calc(20% - 14px); }
-    .card .text strong { font-size: 1.2em; }
-  }
-  @media (max-width: 700px) {
-    .card { flex: 0 0 calc(25% - 14px); }
-    .card .text strong { font-size: 1.1em; }
-    #win h2 { font-size: 2.5em; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Boardroom Blitz: Ultimate Memory Match</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1a5276, #2980b9); color:#fff; text-align:center; padding:20px; min-height:100vh; }
+    h1 { margin:20px 0; font-size:2.5em; text-shadow:2px 2px 4px rgba(0,0,0,0.3); }
+    #timer { font-size:1.5em; margin:15px 0; font-weight:bold; }
+    #game { display:grid; grid-template-columns:repeat(6, 1fr); gap:12px; max-width:900px; margin:20px auto; }
+    .card { background:#fff; color:#1a5276; border-radius:12px; height:120px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; transition:0.3s; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+    .card.visible { background:#1a5276; color:#fff; }
+    .card.hidden { background:#ecf0f1; }
+    .card.matched { opacity:0; transform:scale(0.8); transition:0.6s; }
+    .text { padding:10px; text-align:center; }
+    .text strong { display:block; font-size:1em; }
+    .text span { font-size:0.8em; opacity:0.8; }
+    .missing { color:#e74c3c; font-size:0.8em; }
+    #win { display:none; flex-direction:column; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(26,82,118,0.95); z-index:100; padding:20px; }
+    #win h2 { font-size:3em; margin:20px 0; }
+    #finalTime { font-size:1.8em; margin:15px 0; }
+    #leaderboard { background:rgba(255,255,255,0.95); color:#1a5276; padding:25px; border-radius:16px; max-width:400px; width:100%; margin:20px auto; }
+    #leaderboard strong { display:block; margin-bottom:15px; font-size:1.3em; }
+    #leaderboardList { list-style:none; }
+    #leaderboardList li { margin:10px 0; padding:10px; background:#f8f9fa; border-radius:8px; border-left:4px solid #1a5276; }
+    input { padding:12px; font-size:1.1em; width:80%; max-width:300px; margin:15px 0; border-radius:8px; border:none; }
+    button { padding:12px 30px; background:#ff6b6b; color:white; border:none; border-radius:8px; font-size:1.1em; cursor:pointer; margin:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+    button:disabled { background:#95a5a6; cursor:not-allowed; }
+    @media (max-width:768px) { #game { grid-template-columns:repeat(4, 1fr); } .card { height:100px; } }
+  </style>
 </head>
 <body>
-<h1>Boardroom Blitz: Ultimate Memory Match</h1>
-<div id="timer">Time: 0s</div>
-<div id="game"></div>
+  <h1>Boardroom Blitz: Ultimate Memory Match</h1>
+  <div id="timer">Time: 0s</div>
+  <div id="game"></div>
 
-<!-- CLEAN RETRO WIN SCREEN — NO PRINT BUTTON -->
-<div id="win">
-  <h2>YOU WIN!</h2>
-  <p id="finalTime"></p>
-  <input type="text" id="playerName" placeholder="Your Name" maxlength="20">
-  <button id="saveScore">Save Score</button>
-  <button onclick="location.reload()">Play Again</button>
-  <div id="leaderboard">
-    <strong>Leaderboard (Top 10)</strong>
-    <ul id="leaderboardList"></ul>
+  <div id="win">
+    <h2>YOU WIN!</h2>
+    <div id="finalTime"></div>
+    <input type="text" id="playerName" placeholder="Your Name" maxlength="20" />
+    <button id="saveScore">Save Score</button>
+    <div id="leaderboard">
+      <strong>Leaderboard (Top 10)</strong>
+      <ul id="leaderboardList"><li>Loading...</li></ul>
+    </div>
+    <button onclick="location.reload()">Play Again</button>
   </div>
-</div>
 
-<canvas id="confetti" style="position:fixed;top:0;left:0;pointer-events:none;z-index:999;"></canvas>
-<audio id="winnerMusic" src="winner-music.mp3" preload="auto"></audio>
+  <audio id="winnerMusic" src="https://cdn.jsdelivr.net/gh/tonetheman/winner@v1.0.0/winner.mp3" preload="auto"></audio>
 
- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script type="module">
-// ==================== FIREBASE CONFIG ====================
-const firebaseConfig = {
-  apiKey: "AIzaSyC0UwDJgS2ZzNgVn9axmdWN6FSVxihgZe8",
-  authDomain: "boardroom-blitz-leaderboard.firebaseapp.com",
-  projectId: "boardroom-blitz-leaderboard",
-  storageBucket: "boardroom-blitz-leaderboard.firebasestorage.app",
-  messagingSenderId: "54754880904",
-  appId: "1:54754880904:web:b594cf6fcab889d922de3d",
-  measurementId: "G-V11RN0QEP7"
-};
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script type="module">
+    // ==================== FIREBASE CONFIG ====================
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0UwDJgS2ZzNgVn9axmdWN6FSVxihgZe8",
+      authDomain: "boardroom-blitz-leaderboard.firebaseapp.com",
+      projectId: "boardroom-blitz-leaderboard",
+      storageBucket: "boardroom-blitz-leaderboard.firebasestorage.app",
+      messagingSenderId: "54754880904",
+      appId: "1:54754880904:web:b594cf6fcab889d922de3d",
+      measurementId: "G-V11RN0QEP7"
+    };
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-// ==================== DATA ====================
-const CSV_DATA = `Name,Company
+    // ==================== DATA ====================
+    const CSV_DATA = `Name,Company
 Sarah Ballard,American Cancer Society
 Victoria Brown,Elemental Advisors
 Colbie Campbell,Slates Harwell Campbell LLP
@@ -224,159 +99,89 @@ Clayton Sporich,Tap Rock Resources
 Ellis Thomas,The Stream Foundation
 Ashley Zickefoose,Dave & Busters`;
 
-const IMG_EXT = '.png';
-let cards = [], selected = [], lock = false, startTime, timerId;
-const gameDiv = document.getElementById('game');
-const winDiv = document.getElementById('win');
-const finalTimeEl = document.getElementById('finalTime');
-const leaderboardList = document.getElementById('leaderboardList');
-const saveScoreBtn = document.getElementById('saveScore');
-const playerNameInput = document.getElementById('playerName');
-const winnerMusic = document.getElementById('winnerMusic');
+    const IMG_EXT = '.png';
+    let cards = [], selected = [], lock = false, startTime, timerId;
+    const gameDiv = document.getElementById('game');
+    const winDiv = document.getElementById('win');
+    const finalTimeEl = document.getElementById('finalTime');
+    const leaderboardList = document.getElementById('leaderboardList');
+    const saveScoreBtn = document.getElementById('saveScore');
+    const playerNameInput = document.getElementById('playerName');
+    const winnerMusic = document.getElementById('winnerMusic');
 
-// ==================== LEADERBOARD ====================
-async function saveScore(name, time) {
-  try {
-    await addDoc(collection(db, 'scores'), { name, time, date: new Date() });
-  } catch (e) {
-    console.error('Save failed:', e);
-    let scores = JSON.parse(localStorage.getItem('memoryLeaderboard') || '[]');
-    scores.push({ name, time });
-    scores.sort((a, b) => a.time - b.time);
-    scores = scores.slice(0, 10);
-    localStorage.setItem('memoryLeaderboard', JSON.stringify(scores));
-  }
-}
-
-async function loadLeaderboard() {
-  try {
-    const q = query(collection(db, 'scores'), orderBy('time'), limit(10));
-    const snapshot = await getDocs(q);
-    const scores = snapshot.docs.map(doc => doc.data());
-    leaderboardList.innerHTML = scores.length
-      ? scores.map(s => `<li><strong>${s.name}</strong> — ${s.time}s</li>`).join('')
-      : '<li>No scores yet!</li>';
-  } catch (e) {
-    const scores = JSON.parse(localStorage.getItem('memoryLeaderboard') || '[]');
-    leaderboardList.innerHTML = scores.length
-      ? scores.map(s => `<li><strong>${s.name}</strong> — ${s.time}s</li>`).join('')
-      : '<li>No scores yet!</li>';
-  }
-}
-
-// ==================== GAME ====================
-function safeName(name) { return name.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, '_'); }
-
-CSV_DATA.trim().split('\n').slice(1).forEach((line, i) => {
-  const [name, company] = line.split(',').map(s => s.trim());
-  const img = safeName(name) + IMG_EXT;
-  cards.push({id: i, type: 'photo', img, name, company});
-  cards.push({id: i, type: 'text', img, name, company});
-});
-
-shuffle(cards);
-render();
-startTimer();
-
-function render() {
-  gameDiv.innerHTML = '';
-  cards.forEach(c => {
-    const card = document.createElement('div');
-    card.className = 'card visible';
-    card.dataset.id = c.id;
-    card.dataset.type = c.type;
-    if (c.type === 'photo') {
-      const img = document.createElement('img');
-      img.src = c.img;
-      img.alt = c.name;
-      img.onerror = () => card.innerHTML = `<div class="missing">MISSING<br><small>${c.img}</small></div>`;
-      card.appendChild(img);
-    } else {
-      card.innerHTML = `<div class="text"><strong>${c.name}</strong><span>${c.company}</span></div>`;
+    // ==================== LEADERBOARD ====================
+    async function saveScore(name, time) {
+      try {
+        await addDoc(collection(db, 'scores'), { name, time, date: new Date() });
+      } catch (e) {
+        console.error('Save failed:', e);
+        let scores = JSON.parse(localStorage.getItem('memoryLeaderboard') || '[]');
+        scores.push({ name, time });
+        scores.sort((a, b) => a.time - b.time);
+        scores = scores.slice(0, 10);
+        localStorage.setItem('memoryLeaderboard', JSON.stringify(scores));
+      }
     }
-    card.onclick = () => flip(card);
-    gameDiv.appendChild(card);
-  });
-}
 
-function flip(card) {
-  if (lock || card.classList.contains('hidden') || card.classList.contains('matched')) return;
-  card.classList.remove('visible'); card.classList.add('hidden'); card.innerHTML = ''; selected.push(card);
-  if (selected.length === 2) {
-    lock = true;
-    const [a, b] = selected;
-    if (a.dataset.id === b.dataset.id && a.dataset.type !== b.dataset.type) {
-      setTimeout(() => {
-        a.classList.add('matched'); b.classList.add('matched');
-        setTimeout(() => { a.remove(); b.remove(); checkWin(); }, 600);
-        selected = []; lock = false;
-      }, 700);
-    } else {
-      setTimeout(() => {
-        a.classList.remove('hidden'); a.classList.add('visible');
-        b.classList.remove('hidden'); b.classList.add('visible');
-        renderCardContent(a); renderCardContent(b);
-        selected = []; lock = false;
-      }, 1200);
+    async function loadLeaderboard() {
+      try {
+        const q = query(collection(db, 'scores'), orderBy('time'), limit(10));
+        const snapshot = await getDocs(q);
+        const scores = snapshot.docs.map(doc => doc.data());
+        leaderboardList.innerHTML = scores.length
+          ? scores.map(s => `<li><strong>${s.name}</strong> — ${s.time}s</li>`).join('')
+          : '<li>No scores yet!</li>';
+      } catch (e) {
+        const scores = JSON.parse(localStorage.getItem('memoryLeaderboard') || '[]');
+        leaderboardList.innerHTML = scores.length
+          ? scores.map(s => `<li><strong>${s.name}</strong> — ${s.time}s</li>`).join('')
+          : '<li>No scores yet!</li>';
+      }
     }
-  }
-}
 
-function renderCardContent(card) {
-  const data = cards.find(c => c.id == card.dataset.id && c.type === card.dataset.type);
-  if (!data) return;
-  if (data.type === 'photo') {
-    const img = document.createElement('img');
-    img.src = data.img; img.alt = data.name;
-    card.appendChild(img);
-  } else {
-    card.innerHTML = `<div class="text"><strong>${data.name}</strong><span>${data.company}</span></div>`;
-  }
-}
+    // ==================== GAME ====================
+    function safeName(name) { return name.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, '_'); }
 
-function checkWin() {
-  if (gameDiv.children.length === 0) {
-    clearInterval(timerId);
-    const secs = Math.round((Date.now() - startTime)/1000);
-    finalTimeEl.textContent = `Completed in ${secs} seconds!`;
-    confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
-    winnerMusic.play().catch(() => {});
-    winDiv.style.display = 'flex';
-    loadLeaderboard();
-    setupSaveScore(secs);
-  }
-}
+    CSV_DATA.trim().split('\n').slice(1).forEach((line, i) => {
+      const [name, company] = line.split(',').map(s => s.trim());
+      const img = safeName(name) + IMG_EXT;
+      cards.push({id: i, type: 'photo', img, name, company});
+      cards.push({id: i, type: 'text', img, name, company});
+    });
 
-function setupSaveScore(secs) {
-  saveScoreBtn.onclick = async () => {
-    let name = playerNameInput.value.trim() || 'Anonymous';
-    await saveScore(name, secs);
-    playerNamedatabases.value = '';
-    await loadLeaderboard();
-    saveScoreBtn.disabled = true;
-    saveScoreBtn.textContent = 'Saved Globally!';
-  };
-}
+    function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } }
+    shuffle(cards);
+    render();
+    startTimer();
 
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-}
+    function render() {
+      gameDiv.innerHTML = '';
+      cards.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'card visible';
+        card.dataset.id = c.id;
+        card.dataset.type = c.type;
+        if (c.type === 'photo') {
+          const img = document.createElement('img');
+          img.src = c.img;
+          img.alt = c.name;
+          img.onerror = () => card.innerHTML = `<div class="missing">MISSING<br><small>${c.img}</small></div>`;
+          card.appendChild(img);
+        } else {
+          card.innerHTML = `<div class="text"><strong>${c.name}</strong><span>${c.company}</span></div>`;
+        }
+        card.onclick = () => flip(card);
+        gameDiv.appendChild(card);
+      });
+    }
 
-function startTimer() {
-  startTime = Date.now();
-  timerId = setInterval(() => {
-    const secs = Math.round((Date.now() - startTime)/1000);
-    document.getElementById('timer').textContent = `Time: ${secs}s`;
-  }, 500);
-}
-</script>
-
-</body>
-
-</html>
-
-
-
+    function flip(card) {
+      if (lock || card.classList.contains('hidden') || card.classList.contains('matched')) return;
+      card.classList.remove('visible'); card.classList.add('hidden'); card.innerHTML = ''; selected.push(card);
+      if (selected.length === 2) {
+        lock = true;
+        const [a, b] = selected;
+        if (a.dataset.id === b.dataset.id && a.dataset.type !== b.dataset.type) {
+          setTimeout(() => {
+            a.classList.add('matched'); b.classList.add('matched');
+            setTimeout(() => { a.remove(); b.remove(); checkWin(); }, 600);
