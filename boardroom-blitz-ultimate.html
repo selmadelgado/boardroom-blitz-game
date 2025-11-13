@@ -235,21 +235,6 @@ const saveScoreBtn = document.getElementById('saveScore');
 const playerNameInput = document.getElementById('playerName');
 const winnerMusic = document.getElementById('winnerMusic');
 
-// =============== GAMES PLAYED COUNTER (local) ===============
-let gamesPlayed = parseInt(localStorage.getItem('boardroomBlitzGamesPlayed') || '0');
-gamesPlayed++;
-localStorage.setItem('boardroomBlitzGamesPlayed', gamesPlayed);
-
-const counterHTML = `<div style="margin:10px 0; font-weight:bold; color:#1a5276;">
-  Games Played: <span id="gamesCounter">${gamesPlayed}</span>
-</div>`;
-document.getElementById('timer').insertAdjacentHTML('afterend', counterHTML);
-
-document.getElementById('win').insertAdjacentHTML('beforeend', 
-  `<p style="margin-top:15px; font-size:1em; color:#fff; text-shadow:1px 1px 0 #000;">
-     Total Games Played: ${gamesPlayed}
-   </p>`);
-
 // ==================== GLOBAL LEADERBOARD ====================
 async function saveScore(name, time) {
   try {
@@ -282,7 +267,7 @@ async function loadLeaderboard() {
   }
 }
 
-// ==================== GAME LOGIC (unchanged) ====================
+// ==================== GAME LOGIC ====================
 function safeName(name) {
   return name.replace(/[\/\\:*?"<>|]/g, '').replace(/\s+/g, '_');
 }
@@ -421,7 +406,8 @@ function startTimer() {
   }, 500);
 }
 </script>
-<script>
+
+ 
 // ==================== DATA ====================
 const CSV_DATA = `Name,Company
 Sarah Ballard,American Cancer Society
@@ -625,3 +611,4 @@ function shuffle(a) {
 </body>
 
 </html>
+
