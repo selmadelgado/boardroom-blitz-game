@@ -221,7 +221,7 @@ Ashley Zickefoose,Dave & Busters`;
       if (gameDiv.children.length === 0) {
         clearInterval(timerId);
         const secs = Math.round((Date.now() - startTime)/1000);
-        finalTimeEl.textContent = `Completed in ${secs} seconds!`;
+        finalTimeEl.textContent = `You blitzed the boardroom in ${secs} seconds!`;
         confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
         winnerMusic.play().catch(() => {});
         winDiv.style.display = 'flex';
@@ -251,4 +251,5 @@ Ashley Zickefoose,Dave & Busters`;
   </script>
 </body>
 </html>
+
 
